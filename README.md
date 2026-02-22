@@ -56,7 +56,9 @@ DB_NAME=taskflow_db
 ### 3. Create the database
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE taskflow_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+CREATE DATABASE taskflow_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 4. Run migrations
