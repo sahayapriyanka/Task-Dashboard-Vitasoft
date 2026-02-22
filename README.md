@@ -1,10 +1,25 @@
-# TaskFlow — Backend API
+# TaskFlow — Full-Stack Task Management Application
 
-A RESTful API built with **Node.js**, **Express**, and **TypeScript**, providing JWT authentication and full CRUD task management with MySQL persistence.
+A modern, full-stack task management application built with **React**, **TypeScript**, **Node.js**, and **MySQL**. Features include JWT authentication, real-time task filtering, animated UI transitions, and comprehensive API documentation.
+
+---
+
+## Project Overview
+
+TaskFlow is a production-ready task management system designed for individual productivity. Users can:
+
+- **Authenticate securely** with JWT-based login and registration
+- **Create, read, update, and delete tasks** with full CRUD operations
+- **Filter and search tasks** by status, priority, and keywords
+- **Track progress** with real-time statistics dashboard
+- **Enjoy smooth UX** with animated transitions and dark/light theme support
+- **Access API documentation** via interactive Swagger UI
 
 ---
 
 ## Tech Stack
+
+### Backend
 
 | Layer | Technology |
 |-------|-----------|
@@ -16,6 +31,20 @@ A RESTful API built with **Node.js**, **Express**, and **TypeScript**, providing
 | Validation | express-validator |
 | Security | helmet, cors, express-rate-limit |
 | API Documentation | Swagger (swagger-jsdoc + swagger-ui-express) |
+
+### Frontend
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 18 |
+| Language | TypeScript |
+| Build Tool | Vite |
+| Routing | React Router v6 |
+| State Management | Zustand + TanStack Query (React Query) |
+| HTTP Client | Axios |
+| Animations | Framer Motion |
+| Styling | CSS Modules |
+| Notifications | React Hot Toast |
 
 ---
 
@@ -29,14 +58,16 @@ A RESTful API built with **Node.js**, **Express**, and **TypeScript**, providing
 
 ## Installation & Setup
 
-### 1. Install dependencies
+### Backend Setup
+
+#### 1. Install backend dependencies
 
 ```bash
 cd backend
 npm install
 ```
 
-### 2. Configure environment variables
+#### 2. Configure environment variables
 
 ```bash
 cp .env.example .env
@@ -45,7 +76,12 @@ cp .env.example .env
 Update `.env` with your credentials:
 
 ```env
+PORT=5000
 JWT_SECRET=your_strong_secret_min_32_characters
+JWT_EXPIRES_IN=7d
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:3000
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
@@ -53,15 +89,17 @@ DB_PASSWORD=your_mysql_password
 DB_NAME=taskflow_db
 ```
 
-### 3. Create the database
+#### 3. Create the database
 
-```bash
+Open MySQL and run:
+
+```sql
 CREATE DATABASE taskflow_db
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 4. Run migrations
+#### 4. Run migrations
 
 ```bash
 npm run migrate
@@ -72,24 +110,71 @@ This creates the following tables:
 - `users` — `id`, `email`, `password`, `name`, `created_at`
 - `tasks` — `id`, `user_id`, `title`, `description`, `status`, `priority`, `due_date`, `created_at`, `updated_at`
 
----
-
-## Running the Server
-
-### Development
+#### 5. Start the backend server
 
 ```bash
+# Development mode with hot reload
 npm run dev
-# Server:  http://localhost:5000
-# Swagger: http://localhost:5000/api-docs
-```
 
-### Production
-
-```bash
+# Production mode
 npm run build
 npm start
 ```
+
+Backend will be available at:
+- **API Server**: http://localhost:5000
+- **Swagger Docs**: http://localhost:5000/api-docs
+
+---
+
+### Frontend Setup
+
+#### 1. Install frontend dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+#### 2. Configure environment variables
+
+Create a `.env` file in the `frontend` directory:
+
+```bash
+VITE_API_URL=http://localhost:5000/api
+```
+
+#### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+Frontend will be available at:
+- **Application**: http://localhost:3000
+
+#### 4. Build for production
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## Running the Full Application
+
+1. **Start MySQL** (ensure it's running on port 3306)
+2. **Start Backend** (in `backend/` directory):
+   ```bash
+   npm run dev
+   ```
+3. **Start Frontend** (in `frontend/` directory):
+   ```bash
+   npm run dev
+   ```
+4. **Open browser** and navigate to http://localhost:3000
+5. **Register a new account** or login to start managing tasks
 
 ---
 
@@ -130,18 +215,41 @@ npm run migrate:make <migration_name>
 ## Project Structure
 
 ```
-backend/
-├── src/
-│   ├── config/         # Swagger spec, database connection, repository
-│   ├── controllers/    # authController, taskController
-│   ├── middleware/     # authenticate, validate, errorHandler
-│   ├── routes/         # auth.ts, tasks.ts (with Swagger JSDoc annotations)
-│   ├── types/          # Shared TypeScript interfaces
-│   └── index.ts        # Express application entry point
-├── migrations/         # Knex migration files
-├── .env.example
-├── package.json
-└── tsconfig.json
+task-dashboard/
+├── backend/
+│   ├── src/
+│   │   ├── config/         # Swagger spec, database connection, repository
+│   │   ├── controllers/    # authController, taskController
+│   │   ├── middleware/     # authenticate, validate, errorHandler
+│   │   ├── routes/         # auth.ts, tasks.ts (with Swagger JSDoc annotations)
+│   │   ├── types/          # Shared TypeScript interfaces
+│   │   └── index.ts        # Express application entry point
+│   ├── database/
+│   │   └── migrations/     # Knex migration files
+│   ├── .env.example
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/       # AuthPage (login/register)
+│   │   │   ├── tasks/      # Dashboard, TaskCard, TaskModal
+│   │   │   ├── layout/     # Layout component with navigation
+│   │   │   └── ui/         # ProtectedRoute and reusable UI components
+│   │   ├── hooks/          # useTasks (React Query hook)
+│   │   ├── services/       # API client with Axios interceptors
+│   │   ├── store/          # Zustand stores (auth, theme)
+│   │   ├── types/          # TypeScript interfaces
+│   │   ├── styles/         # Global CSS
+│   │   ├── App.tsx         # Main app with routing
+│   │   └── main.tsx        # React entry point
+│   ├── .env
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── tsconfig.json
+│
+└── README.md
 ```
 
 ---
@@ -190,10 +298,56 @@ FLUSH PRIVILEGES;
 
 ---
 
+## Features
+
+### Authentication
+- Secure JWT-based authentication
+- Password hashing with bcryptjs
+- Persistent login sessions
+- Protected routes with automatic token refresh
+
+### Task Management
+- Create, read, update, and delete tasks
+- Set task priority (low, medium, high)
+- Track task status (todo, in-progress, done)
+- Add due dates with validation
+- Rich text descriptions
+
+### User Experience
+- Real-time task statistics dashboard
+- Advanced filtering by status and priority
+- Full-text search across title and description
+- Smooth animations with Framer Motion
+- Dark/light theme toggle with persistence
+- Responsive design for all screen sizes
+- Toast notifications for user feedback
+
+### Developer Experience
+- Full TypeScript coverage
+- Interactive API documentation (Swagger)
+- Hot module replacement in development
+- ESLint configuration
+- Modular architecture
+
+---
+
 ## Known Limitations
 
 - **Single user context** — No team or workspace collaboration features.
 - **No file attachments** — Tasks support text fields only.
+- **No email verification** — Accounts are activated immediately upon registration.
+- **No password reset** — Users cannot recover forgotten passwords.
+
+---
+
+## Future Enhancements
+
+- Task categories and tags
+- Recurring tasks
+- Task comments and activity log
+- Email notifications for due dates
+- Export tasks to CSV/PDF
+- Mobile application
 
 ---
 
