@@ -1,0 +1,211 @@
+/* ============================================================
+   styles/global.css - Global styles and CSS custom properties
+   ============================================================ */
+
+/* ── CSS Variables (Dark Theme - Default) ───────────────────── */
+:root,
+:root[data-theme='dark'] {
+  /* Colors */
+  --bg-primary: #0a0f1e;
+  --bg-secondary: #111827;
+  --bg-card: #131d31;
+  --bg-card-hover: #1a2540;
+  --bg-input: #0d1526;
+  --bg-eye: #03050a;
+  --border: #7a7e81;
+  --border-focus: #3b82f6;
+
+  /* Text */
+  --text-primary: #f0f4ff;
+  --text-secondary: #c3cde8;
+  --text-muted: #a3c3ef;
+  --text-accent: #60a5fa;
+
+  /* Accent */
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-glow: rgba(59, 130, 246, 0.2);
+
+  /* Status colors */
+  --status-todo: #64748b;
+  --status-progress: #f59e0b;
+  --status-done: #22c55e;
+
+  /* Priority colors */
+  --priority-low: #22c55e;
+  --priority-medium: #f59e0b;
+  --priority-high: #ef4444;
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-accent: 0 0 24px rgba(59, 130, 246, 0.15);
+
+  /* Transitions */
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── CSS Variables (Light Theme) ────────────────────────────── */
+:root[data-theme='light'] {
+  /* Colors */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-input: #ffffff;
+  --border: #c3bebe;
+  --border-focus: #5050e0;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #202d3a;
+  --text-muted: #111214;
+  --text-accent: #2563eb;
+
+  /* Accent */
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-glow: rgba(59, 130, 246, 0.15);
+
+  /* Status colors */
+  --status-todo: #64748b;
+  --status-progress: #f59e0b;
+  --status-done: #22c55e;
+
+  /* Priority colors */
+  --priority-low: #22c55e;
+  --priority-medium: #f59e0b;
+  --priority-high: #ef4444;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+  --shadow-accent: 0 0 24px rgba(59, 130, 246, 0.1);
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 300ms ease;
+}
+
+:root[data-theme='light'] body::before {
+  opacity: 0.5;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Typography ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+code, kbd, pre {
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Links ────────────────────────────────────────────────── */
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+/* ── Form elements ────────────────────────────────────────── */
+input, textarea, select {
+  font-family: inherit;
+  font-size: 0.9375rem;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ── Utility classes ──────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
