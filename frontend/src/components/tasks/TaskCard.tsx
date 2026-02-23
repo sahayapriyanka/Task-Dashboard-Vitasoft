@@ -58,10 +58,14 @@ const TaskCard = forwardRef<HTMLDivElement, TaskCardProps>(({ task, onEdit }, re
     task.dueDate && task.status !== 'done' && isBefore(parseISO(task.dueDate), startOfToday());
 
   /** Toggle task completion with a single click */
-  const handleToggleDone = (e: React.MouseEvent) => {
+  const handleToggleDone = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const nextStatus = task.status === 'done' ? 'todo' : 'done';
-    updateMutation.mutate({ id: task.id, data: { status: nextStatus } });
+    try {
+      await updateMutation.mutateAsync({ id: task.id, data: { status: nextStatus } });
+    } catch {
+      // Error handled by mutation hook
+    }
   };
 
   const handleEdit = (e: React.MouseEvent) => {
@@ -69,10 +73,14 @@ const TaskCard = forwardRef<HTMLDivElement, TaskCardProps>(({ task, onEdit }, re
     onEdit(task);
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm('Delete this task?')) {
-      deleteMutation.mutate(task.id);
+      try {
+        await deleteMutation.mutateAsync(task.id);
+      } catch {
+        // Error handled by mutation hook
+      }
     }
   };
 
@@ -126,7 +134,7 @@ const TaskCard = forwardRef<HTMLDivElement, TaskCardProps>(({ task, onEdit }, re
           {/* Quick toggle done */}
           <button
             className={styles.actionBtn}
-            onClick={handleToggleDone}
+            onClick={(e) => void handleToggleDone(e)}
             title={task.status === 'done' ? 'Mark as to do' : 'Mark as done'}
           >
             {task.status === 'done' ? '↩' : '✓'}
@@ -140,7 +148,7 @@ const TaskCard = forwardRef<HTMLDivElement, TaskCardProps>(({ task, onEdit }, re
           {/* Delete */}
           <button
             className={`${styles.actionBtn} ${styles.deleteBtn}`}
-            onClick={handleDelete}
+            onClick={(e) => void handleDelete(e)}
             title="Delete task"
           >
             ✕

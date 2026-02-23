@@ -54,6 +54,17 @@ class DatabaseRepository {
   /** Persist a task (create or update) */
   async saveTask(task: Task): Promise<void> {
     const existing = await this.findTaskById(task.id);
+    
+    // Format due_date: handle string, Date object, or null
+    let formattedDueDate = null;
+    if (task.dueDate) {
+      if (typeof task.dueDate === 'string') {
+        formattedDueDate = task.dueDate.split('T')[0];
+      } else if (task.dueDate instanceof Date) {
+        formattedDueDate = task.dueDate.toISOString().split('T')[0];
+      }
+    }
+    
     const data = {
       id: task.id,
       user_id: task.userId,
@@ -61,7 +72,7 @@ class DatabaseRepository {
       description: task.description,
       status: task.status,
       priority: task.priority,
-      due_date: task.dueDate ? task.dueDate.split('T')[0] : null,
+      due_date: formattedDueDate,
       updated_at: db.fn.now(),
     };
 
