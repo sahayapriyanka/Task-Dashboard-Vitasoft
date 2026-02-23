@@ -45,7 +45,7 @@ export default function TaskModal({ task, onClose }: TaskModalProps) {
         description: task.description,
         status: task.status,
         priority: task.priority,
-        dueDate: task.dueDate ?? '',
+        dueDate: task.dueDate ? task.dueDate.split('T')[0] : '',
       });
     }
   }, [task]);

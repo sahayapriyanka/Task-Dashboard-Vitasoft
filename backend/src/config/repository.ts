@@ -61,7 +61,7 @@ class DatabaseRepository {
       description: task.description,
       status: task.status,
       priority: task.priority,
-      due_date: task.dueDate,
+      due_date: task.dueDate ? task.dueDate.split('T')[0] : null,
       updated_at: db.fn.now(),
     };
 
